@@ -1,0 +1,52 @@
+from pydantic import BaseModel, Field, ConfigDict
+from datetime import datetime
+from decimal import Decimal
+from typing import Optional
+
+
+class ServicioBase(BaseModel):
+    nombre: str = Field(..., max_length=120, description="Nombre del servicio o extra")
+    tipo: str = Field(..., max_length=50, description="Tipo de servicio")
+    precio_unitario: float = Field(..., ge=0, description="Precio unitario del servicio")
+    descripcion: Optional[str] = Field(None, max_length=255, description="Descripción del servicio")
+    categoria: Optional[str] = Field(None, max_length=50, description="Categoría del servicio")
+    costo_proveedor: Optional[float] = Field(None, ge=0, description="Costo de proveedor del servicio")
+
+
+class ServicioCreate(ServicioBase):
+    """Esquema para crear un servicio en el catálogo."""
+    # En creación exigimos precio positivo; permitimos 0 en respuestas (servicios gratuitos)
+    precio_unitario: float = Field(..., gt=0, description="Precio unitario del servicio")
+
+
+class ServicioResponse(ServicioBase):
+    ID_Servicio: int
+    estado: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ConsumoBase(BaseModel):
+    ID_Reserva: int = Field(..., description="ID de la reserva asociada")
+    ID_Servicio: int = Field(..., description="ID del servicio consumido")
+    cantidad: int = Field(..., gt=0, description="Cantidad de unidades o días de servicio")
+    fecha: Optional[datetime] = Field(None, description="Fecha del consumo")
+    precio_unitario: Optional[float | Decimal] = Field(None, description="Precio unitario aplicado")
+
+
+class ConsumoCreate(BaseModel):
+    ID_Reserva: int = Field(..., description="ID de la reserva asociada")
+    ID_Servicio: int = Field(..., description="ID del servicio consumido")
+    cantidad: int = Field(..., gt=0, description="Cantidad de unidades o días de servicio")
+
+
+class ConsumoResponse(ConsumoBase):
+    ID_Consumo: int
+    fecha: datetime
+    subtotal: float | Decimal
+    # Detalles del servicio para mejor presentación
+    nombre_servicio: Optional[str] = Field(None, description="Nombre del servicio")
+    descripcion_servicio: Optional[str] = Field(None, description="Descripción del servicio")
+    tipo_servicio: Optional[str] = Field(None, description="Tipo del servicio")
+
+    model_config = ConfigDict(from_attributes=True)

@@ -1,0 +1,39 @@
+MODELO BAYESIANO - ENTRENAMIENTO
+===================================
+
+Datos usados para entrenamiento:
+- Registros de entrenamiento: 1002
+
+Distribuciones principales del nuevo dataset:
+- Tipo_Habitacion: {'Doble': 0.4222, 'Simple': 0.3293, 'Suite': 0.2485}
+- Procedencia_Huesped: {'Nacional': 1.0}
+- Dias_Estadia: {'3-5': 0.515, '6+': 0.3762, '1-2': 0.1088}
+- Estado_Reserva: {'confirmada': 0.5499, 'finalizada': 0.3174, 'activa': 0.1327}
+- Tiene_Parking: {'no': 1.0}
+
+Validación del modelo entrenado:
+- Confianza promedio del modelo nuevo: 0.5675
+- Número de variables de evidencia: 12
+
+Comparación con modelo de referencia (muestra sintética):
+- Registros sintéticos de referencia: 0
+- Confianza promedio referencia: 0.0000
+- Diferencia de confianza: 0.5675
+
+Estructura final del modelo entrenado:
+- Tipo_Habitacion -> Tipo_Servicio
+- Tipo_Servicio -> Baja_Ocupacion
+- Tipo_Servicio -> Sobrecarga_Limpieza
+- Piso_Habitacion -> Tipo_Servicio
+- Procedencia_Huesped -> Tipo_Servicio
+- Dias_Estadia -> Tipo_Servicio
+- Estado_Habitacion -> Tipo_Servicio
+- Precio_Rango -> Tipo_Servicio
+- Amenidades_Habitacion -> Tipo_Servicio
+- Estado_Reserva -> Tipo_Servicio
+- Estado_Reserva -> Baja_Ocupacion
+- Tiene_Parking -> Tipo_Servicio
+- Reservas_Previas -> Tipo_Servicio
+- Consumos_Count -> Tipo_Servicio
+- Tickets_Pendientes -> Tipo_Servicio
+- Tickets_Pendientes -> Sobrecarga_Limpieza
